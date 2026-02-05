@@ -26,11 +26,11 @@ public class DeliveryItem {
 
     public DeliveryItem() {}
 
-    public DeliveryItem(Delivery delivery, Product product, BigDecimal weightKg, BigDecimal totalPrice) {
+    public DeliveryItem(Delivery delivery, Product product, BigDecimal weightKg) {
         this.delivery = delivery;
         this.product = product;
         this.weightKg = weightKg;
-        this.totalPrice = totalPrice;
+        this.totalPrice = product.getPricePerKg().multiply(weightKg);
     }
 
     public Delivery getDelivery() {

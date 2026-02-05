@@ -21,6 +21,14 @@ public class Delivery {
     @OneToMany(mappedBy = "delivery", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DeliveryItem> deliveryItems;
 
+    public Delivery() {
+    }
+
+    public Delivery(Supplier supplier, LocalDate deliveryDate) {
+        this.supplier = supplier;
+        this.deliveryDate = deliveryDate;
+    }
+
     public Delivery(Supplier supplier, LocalDate deliveryDate, List<DeliveryItem> deliveryItems) {
         this.supplier = supplier;
         this.deliveryDate = deliveryDate;
@@ -53,5 +61,13 @@ public class Delivery {
 
     public void setDeliveryItems(List<DeliveryItem> deliveryItems) {
         this.deliveryItems = deliveryItems;
+    }
+
+    public void addDeliveryItem(DeliveryItem deliveryItem) {
+        deliveryItems.add(deliveryItem);
+    }
+
+    public void removeDeliveryItem(DeliveryItem deliveryItem) {
+        deliveryItems.remove(deliveryItem);
     }
 }
