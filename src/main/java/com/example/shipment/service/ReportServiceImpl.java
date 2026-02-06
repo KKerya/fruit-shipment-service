@@ -3,9 +3,12 @@ package com.example.shipment.service;
 import com.example.shipment.domain.Delivery;
 import com.example.shipment.domain.DeliveryItem;
 import com.example.shipment.dto.ReportDto;
+import com.example.shipment.repository.DeliveryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,9 +16,17 @@ import java.util.Map;
 
 @Service
 public class ReportServiceImpl implements ReportService {
+    private final DeliveryRepository deliveryRepository;
+
+    @Autowired
+    public ReportServiceImpl(DeliveryRepository deliveryRepository) {
+        this.deliveryRepository = deliveryRepository;
+    }
 
     @Override
-    public List<ReportDto> getReport(List<Delivery> deliveries) {
+    public List<ReportDto> getReport(LocalDate start, LocalDate end) {
+        List<Delivery> deliveries = deliveryRepository.findByDeliveryDateBetween(start, end);
+
         Map<String, ReportAccumulator> accumulatorMap = new HashMap<>();
 
         for (Delivery delivery : deliveries) {
