@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ReportPageController {
-    @GetMapping("/reports")
+    @GetMapping("/report")
     public String reportPage() {
         return "report";
     }
