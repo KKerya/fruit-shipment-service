@@ -3,6 +3,7 @@ package com.example.shipment.domain;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,17 +24,19 @@ public class Delivery {
     private List<DeliveryItem> deliveryItems;
 
     public Delivery() {
+        this.deliveryItems = new ArrayList<>();
     }
 
     public Delivery(Supplier supplier, LocalDate deliveryDate) {
         this.supplier = supplier;
         this.deliveryDate = deliveryDate;
+        this.deliveryItems = new ArrayList<>();
     }
 
     public Delivery(Supplier supplier, LocalDate deliveryDate, List<DeliveryItem> deliveryItems) {
         this.supplier = supplier;
         this.deliveryDate = deliveryDate;
-        this.deliveryItems = deliveryItems;
+        this.deliveryItems = deliveryItems == null ? new ArrayList<>() : new ArrayList<>(deliveryItems);
     }
 
     public Long getId() {
@@ -65,6 +68,9 @@ public class Delivery {
     }
 
     public void addDeliveryItem(DeliveryItem deliveryItem) {
+        if (deliveryItems == null) {
+            deliveryItems = new ArrayList<>();
+        }
         deliveryItems.add(deliveryItem);
     }
 
