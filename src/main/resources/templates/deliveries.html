@@ -2,54 +2,102 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Отчёт</title>
+    <title>Поставки</title>
     <link rel="stylesheet" th:href="@{/css/deliveries.css}">
+
 </head>
 <body>
-<h1>Отчёт по поставкам</h1>
+<h1>Поставки</h1>
 <nav>
     <a href="/deliveries">Поставки</a> | <a href="/report">Отчёт</a>
 </nav>
 
 <div class="section">
-    <h2>Период</h2>
-    <form id="report-form">
+    <h2>Новая поставка</h2>
+    <form id="delivery-form">
         <div class="row">
             <div>
-                <label for="startDate">Дата начала</label>
-                <input type="date" id="startDate" name="startDate" required>
+                <label for="supplierId">Поставщик</label>
+                <select id="supplierId" name="supplierId" required>
+                    <option value="" disabled selected>Выберите поставщика</option>
+                    <option th:each="supplier : ${suppliers}" th:value="${supplier.id}" th:text="${supplier.name}"></option>
+                </select>
             </div>
             <div>
-                <label for="endDate">Дата окончания</label>
-                <input type="date" id="endDate" name="endDate" required>
+                <label for="deliveryDate">Дата</label>
+                <input type="date" id="deliveryDate" name="deliveryDate" required>
             </div>
         </div>
+
         <div class="section">
-            <button type="submit">Построить отчёт</button>
+            <h3>Состав поставки</h3>
+            <div id="items-container"></div>
+            <div class="actions">
+                <button type="button" id="add-item">Добавить позицию</button>
+            </div>
         </div>
-        <div id="report-message"></div>
+
+        <div class="actions">
+            <button type="submit">Сохранить поставку</button>
+        </div>
+        <div id="delivery-message"></div>
     </form>
 </div>
 
 <div class="section">
-    <h2>Результат</h2>
+    <h2>Список поставок</h2>
     <table>
         <thead>
         <tr>
+            <th>Дата</th>
             <th>Поставщик</th>
-            <th>Продукт</th>
-            <th>Тип</th>
-            <th>Вес (кг)</th>
-            <th>Стоимость (₽)</th>
+            <th>Позиции</th>
         </tr>
         </thead>
-        <tbody id="report-body">
-        <tr>
-            <td colspan="5">Задайте период и постройте отчёт.</td>
+        <tbody>
+        <tr th:each="delivery : ${deliveries}">
+            <td th:text="${delivery.deliveryDate}"></td>
+            <td th:text="${delivery.supplier.name}"></td>
+            <td>
+                <table class="items-table">
+                    <tbody>
+                    <tr th:each="item : ${delivery.deliveryItems}">
+                        <td th:text="${item.product.name}"></td>
+                        <td th:text="${item.product.productType.displayName}"></td>
+                        <td th:text="${item.weightKg} + ' кг'"></td>
+                        <td th:text="${item.totalPrice} + ' ₽'"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(deliveries)}">
+            <td colspan="3">Поставок пока нет.</td>
         </tr>
         </tbody>
     </table>
 </div>
+
+<template id="item-template">
+    <div class="item-row">
+        <div>
+            <label>Продукт</label>
+            <select class="product-select" required>
+                <option value="" disabled selected>Выберите продукт</option>
+                <option th:each="product : ${products}" th:value="${product.id}"
+                        th:text="${product.name + ' (' + product.productType.displayName + ')'}"></option>
+            </select>
+        </div>
+        <div>
+            <label>Вес (кг)</label>
+            <input type="number" min="0.1" step="0.1" class="weight-input" required>
+        </div>
+        <div>
+            <label>&nbsp;</label>
+            <button type="button" class="remove-item">Удалить</button>
+        </div>
+    </div>
+</template>
 
 <script th:src="@{/js/deliveries.js}"></script>
 </body>

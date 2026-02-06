@@ -1,44 +1,51 @@
-const reportBody = document.getElementById('report-body');
-const message = document.getElementById('report-message');
+const itemsContainer = document.getElementById('items-container');
+    const template = document.getElementById('item-template');
+    const addItemButton = document.getElementById('add-item');
+    const message = document.getElementById('delivery-message');
 
-document.getElementById('report-form').addEventListener('submit', async (event) => {
-    event.preventDefault();
-    message.textContent = '';
-    message.className = '';
-
-    const startDate = document.getElementById('startDate').value;
-    const endDate = document.getElementById('endDate').value;
-
-    if (!startDate || !endDate) {
-        message.textContent = 'Укажите период отчёта.';
-        message.className = 'error';
-        return;
+    function addItemRow() {
+        const clone = template.content.cloneNode(true);
+        clone.querySelector('.remove-item').addEventListener('click', (event) => {
+            event.target.closest('.item-row').remove();
+        });
+        itemsContainer.appendChild(clone);
     }
 
-    const response = await fetch(`/api/reports/deliveries?startDate=${startDate}&endDate=${endDate}`);
-    if (!response.ok) {
-        message.textContent = 'Не удалось получить отчёт.';
-        message.className = 'error';
-        return;
-    }
+    addItemButton.addEventListener('click', addItemRow);
+    addItemRow();
 
-    const data = await response.json();
-    reportBody.innerHTML = '';
+    document.getElementById('delivery-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        message.textContent = '';
+        message.className = '';
 
-    if (!data.length) {
-        reportBody.innerHTML = '<tr><td colspan="5">Нет данных за выбранный период.</td></tr>';
-        return;
-    }
+        const supplierId = document.getElementById('supplierId').value;
+        const deliveryDate = document.getElementById('deliveryDate').value;
+        const items = Array.from(document.querySelectorAll('.item-row')).map(row => ({
+            productId: Number(row.querySelector('.product-select').value),
+            weightKg: Number(row.querySelector('.weight-input').value)
+        }));
 
-    data.forEach(row => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${row.supplierName}</td>
-            <td>${row.productName}</td>
-            <td>${row.productType}</td>
-            <td>${row.totalWeight}</td>
-            <td>${row.totalCost}</td>
-        `;
-        reportBody.appendChild(tr);
-    });
-});
+        if (!supplierId || !deliveryDate || items.length === 0) {
+            message.textContent = 'Заполните все поля.';
+            message.className = 'error';
+            return;
+        }
+
+        const response = await fetch('/api/deliveries', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ supplierId: Number(supplierId), deliveryDate, deliveryItems: items })
+        });
+
+        if (!response.ok) {
+            message.textContent = 'Не удалось сохранить поставку.';
+            message.className = 'error';
+            return;
+        }
+
+        message.textContent = 'Поставка сохранена. Обновите страницу, чтобы увидеть список.';
+        message.className = 'notice';
+        document.getElementById('delivery-form').reset();
+        itemsContainer.innerHTML = '';
+        addItemRow();
