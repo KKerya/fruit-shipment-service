@@ -26,7 +26,11 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public List<ReportDto> getReport(LocalDate start, LocalDate end) {
         List<Delivery> deliveries = deliveryRepository.findByDeliveryDateBetween(start, end);
+        return buildReport(deliveries);
+    }
 
+    @Override
+    public List<ReportDto> buildReport(List<Delivery> deliveries) {
         Map<String, ReportAccumulator> accumulatorMap = new HashMap<>();
 
         for (Delivery delivery : deliveries) {
@@ -36,9 +40,9 @@ public class ReportServiceImpl implements ReportService {
                         deliveryItem.getProduct().getProductType().getDisplayName();
 
                 accumulatorMap.computeIfAbsent(key, k -> new ReportAccumulator(
-                        delivery.getSupplier().getName(),
-                        deliveryItem.getProduct().getName(),
-                        deliveryItem.getProduct().getProductType().getDisplayName()
+                                delivery.getSupplier().getName(),
+                                deliveryItem.getProduct().getName(),
+                                deliveryItem.getProduct().getProductType().getDisplayName()
                         )
                 );
 

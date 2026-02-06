@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface ReportService {
     List<ReportDto> getReport(LocalDate start, LocalDate end);
+
+    List<ReportDto> buildReport(List<Delivery> deliveries);
 }
