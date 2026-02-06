@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/report")
+@RequestMapping("api/reports")
 public class ReportController {
     private final ReportService reportService;
 
@@ -22,7 +22,7 @@ public class ReportController {
         this.reportService = reportService;
     }
 
-    @GetMapping
+    @GetMapping("/deliveries")
     public List<ReportDto> getReport(
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end)
