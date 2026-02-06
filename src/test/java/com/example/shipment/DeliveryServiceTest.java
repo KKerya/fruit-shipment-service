@@ -11,11 +11,14 @@ import com.example.shipment.repository.DeliveryRepository;
 import com.example.shipment.repository.ProductRepository;
 import com.example.shipment.repository.SupplierRepository;
 import com.example.shipment.service.DeliveryService;
+import com.example.shipment.service.DeliveryServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -30,7 +33,7 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class DeliveryServiceTest {
     @Mock
     private SupplierRepository supplierRepository;
@@ -42,25 +45,20 @@ public class DeliveryServiceTest {
     private ProductRepository productRepository;
 
     @InjectMocks
-    private DeliveryService deliveryService;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+    private DeliveryServiceImpl deliveryService;
 
     @Test
     void acceptDeliveryCreatesDelivery() {
         Supplier supplier = new Supplier("Supplier 1");
         ReflectionTestUtils.setField(supplier, "id", 1L);
 
-        Product product = new Product("Apple Red", new BigDecimal("10.0"), ProductType.APPLE, supplier));
+        Product product = new Product("Apple Red", new BigDecimal("10.00"), ProductType.APPLE, supplier);
         ReflectionTestUtils.setField(product, "id", 10L);
 
         DeliveryRequestDto request = new DeliveryRequestDto(
                 1L,
                 LocalDate.of(2026, 1, 1),
-                List.of(new DeliveryItemRequestDto(10L, new BigDecimal("3.5")))
+                List.of(new DeliveryItemRequestDto(10L, new BigDecimal("3.50")))
         );
 
         when(supplierRepository.findById(1L)).thenReturn(Optional.of(supplier));
@@ -74,5 +72,12 @@ public class DeliveryServiceTest {
         DeliveryResponseDto response = deliveryService.acceptDelivery(request);
 
         assertThat(response.deliveryId()).isEqualTo(70L);
+        assertThat(response.supplierName()).isEqualTo("Supplier 1");
+        assertThat(response.deliveryDate()).isEqualTo(LocalDate.of(2026, 1, 1));
+        assertThat(response.items().size()).isEqualTo(1);
+        assertThat(response.items().get(0).productName()).isEqualTo("Apple Red");
+        assertThat(response.items().get(0).productType()).isEqualTo("Яблоко");
+        assertThat(response.items().get(0).totalPrice()).isEqualByComparingTo("35.00");
+        assertThat(response.items().get(0).weightKg()).isEqualByComparingTo("3.50");
     }
 }
