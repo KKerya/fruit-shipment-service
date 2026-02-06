@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Отчёт</title>
+    <link rel="stylesheet" th:href="@{/css/report.css}">
+</head>
+<body>
+<h1>Отчёт по поставкам</h1>
+<nav>
+    <a href="/deliveries">Поставки</a> | <a href="/reports">Отчёт</a>
+</nav>
+
+<div class="section">
+    <h2>Период</h2>
+    <form id="report-form">
+        <div class="row">
+            <div>
+                <label for="startDate">Дата начала</label>
+                <input type="date" id="startDate" name="startDate" required>
+            </div>
+            <div>
+                <label for="endDate">Дата окончания</label>
+                <input type="date" id="endDate" name="endDate" required>
+            </div>
+        </div>
+        <div class="section">
+            <button type="submit">Построить отчёт</button>
+        </div>
+        <div id="report-message"></div>
+    </form>
+</div>
+
+<div class="section">
+    <h2>Результат</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Поставщик</th>
+            <th>Продукт</th>
+            <th>Тип</th>
+            <th>Вес (кг)</th>
+            <th>Стоимость (₽)</th>
+        </tr>
+        </thead>
+        <tbody id="report-body">
+        <tr>
+            <td colspan="5">Задайте период и постройте отчёт.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script th:src="@{/js/report.js}"></script>
+</body>
+</html>

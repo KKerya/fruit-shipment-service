@@ -12,4 +12,7 @@ import java.util.List;
 public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
     @EntityGraph(attributePaths = {"deliveryItems", "deliveryItems.product", "supplier"})
     List<Delivery> findByDeliveryDateBetween(LocalDate start, LocalDate endDate);
+
+    @EntityGraph(attributePaths = {"deliveryItems", "deliveryItems.product", "supplier"})
+    List<Delivery> findAllByOrderByDeliveryDate();
 }

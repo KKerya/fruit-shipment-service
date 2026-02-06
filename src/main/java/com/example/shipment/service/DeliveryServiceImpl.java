@@ -63,4 +63,9 @@ public class DeliveryServiceImpl implements DeliveryService {
                 itemsResponse
         );
     }
+
+    @Override
+    public List<Delivery> getRecentDeliveries() {
+        return deliveryRepository.findAllByOrderByDeliveryDate();
+    }
 }
