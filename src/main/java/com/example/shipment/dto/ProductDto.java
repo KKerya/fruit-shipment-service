@@ -1,4 +1,9 @@
 package com.example.shipment.dto;
 
-public class ProductDto {
-}
+import com.example.shipment.domain.ProductType;
+
+public record ProductDto (
+        Long id,
+        String name,
+        ProductType productType
+) { }
