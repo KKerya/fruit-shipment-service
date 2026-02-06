@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
+@Table(name = "tbl_products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
