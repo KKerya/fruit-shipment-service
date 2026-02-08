@@ -16,6 +16,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Инициализирует демонстрационные данные при первом запуске приложения.
+ */
 @Component
 public class DataInitializer implements CommandLineRunner {
     private final SupplierRepository supplierRepository;

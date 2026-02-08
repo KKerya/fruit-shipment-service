@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * REST-контроллер для приёма поставок.
+ */
 @RestController
 @RequestMapping("/api/deliveries")
 public class DeliveryController {
@@ -17,6 +20,11 @@ public class DeliveryController {
         this.deliveryService = deliveryService;
     }
 
+    /**
+     * Принимает новую поставку и сохраняет её.
+     * @param deliveryRequestDto данные поставки
+     * @return ответ с данными сохранённой поставки
+     */
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public DeliveryResponseDto acceptDelivery(@RequestBody DeliveryRequestDto deliveryRequestDto){

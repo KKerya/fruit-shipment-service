@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * REST-контроллер для получения отчётов по поставкам.
+ */
 @RestController
 @RequestMapping("/api/reports")
 public class ReportController {
@@ -22,6 +25,12 @@ public class ReportController {
         this.reportService = reportService;
     }
 
+    /**
+     * Возвращает отчёт по поставкам за указанный период.
+     * @param start дата начала периода
+     * @param end дата окончания периода
+     * @return список строк отчёта
+     */
     @GetMapping("/deliveries")
     public List<ReportDto> getReport(
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,

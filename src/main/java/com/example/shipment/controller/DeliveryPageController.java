@@ -1,7 +1,5 @@
 package com.example.shipment.controller;
 
-import com.example.shipment.domain.DeliveryItem;
-import com.example.shipment.domain.Supplier;
 import com.example.shipment.dto.DeliveryDto;
 import com.example.shipment.dto.DeliveryItemDto;
 import com.example.shipment.dto.ProductDto;
@@ -16,6 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
+/**
+ * Контроллер для отображения страниц поставок в UI.
+ */
 @Controller
 public class DeliveryPageController {
     private final CatalogService catalogService;
@@ -32,6 +33,10 @@ public class DeliveryPageController {
         return "redirect:/deliveries";
     }
 
+
+    /**
+     * Подготавливает данные для страницы поставок.
+     */
     @GetMapping("/deliveries")
     public String deliveriesPage(Model model) {
         List<SupplierDto> suppliers = catalogService.getSuppliers().stream()
