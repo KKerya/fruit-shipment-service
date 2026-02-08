@@ -16,4 +16,4 @@
 | Backend  | Java, Spring Boot |
 | Frontend | HTML, CSS, JavaScript |
 | Database | PostgreSQL (Hibernate) |
-| Build | Maven | Docker |
+| Build | Maven, Docker |
