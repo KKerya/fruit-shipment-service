@@ -1,0 +1,37 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 24px;
+}
+h1 {
+    margin-bottom: 8px;
+}
+.section {
+    margin-top: 24px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+}
+th, td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+.row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.row label {
+    display: block;
+    font-weight: bold;
+}
+button {
+    padding: 6px 12px;
+    cursor: pointer;
+}
+.error {
+    margin-top: 12px;
+    color: #c62828;
+}

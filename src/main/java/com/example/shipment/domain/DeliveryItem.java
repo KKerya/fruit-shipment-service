@@ -25,13 +25,18 @@ public class DeliveryItem {
     @Column
     private BigDecimal totalPrice;
 
-    public DeliveryItem() {}
+    public DeliveryItem() {
+    }
 
     public DeliveryItem(Delivery delivery, Product product, BigDecimal weightKg) {
         this.delivery = delivery;
         this.product = product;
         this.weightKg = weightKg;
         this.totalPrice = product.getPricePerKg().multiply(weightKg);
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Delivery getDelivery() {

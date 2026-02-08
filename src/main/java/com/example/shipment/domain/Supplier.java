@@ -16,13 +16,20 @@ public class Supplier {
     private String name;
 
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Product> products = new ArrayList<>();
+    private List<Product> products;
 
     public Supplier() {
+        this.products = new ArrayList<>();
     }
 
     public Supplier(String name) {
         this.name = name;
+        this.products = new ArrayList<>();
+    }
+
+    public Supplier(String name, List<Product> products) {
+        this.name = name;
+        this.products = products == null ? new ArrayList<>() : new ArrayList<>(products);
     }
 
     public long getId() {

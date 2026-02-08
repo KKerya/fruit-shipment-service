@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -42,6 +43,9 @@ public class DeliveryServiceImpl implements DeliveryService {
         for (DeliveryItemRequestDto item : request.deliveryItems()) {
             Product product = productRepository.findById(item.productId())
                     .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+            if (item.weightKg().compareTo(BigDecimal.ZERO) <= 0) {
+                throw new IllegalArgumentException("Вес продуктов должен быть больше 0 " + item.productId());
+            }
             delivery.addDeliveryItem(new DeliveryItem(delivery, product, item.weightKg()));
         }
 
@@ -62,5 +66,10 @@ public class DeliveryServiceImpl implements DeliveryService {
                 saved.getSupplier().getName(),
                 itemsResponse
         );
+    }
+
+    @Override
+    public List<Delivery> getRecentDeliveries() {
+        return deliveryRepository.findAllByOrderByDeliveryDate();
     }
 }
