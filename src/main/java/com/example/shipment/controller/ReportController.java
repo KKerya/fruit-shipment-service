@@ -16,7 +16,7 @@ import java.util.List;
  * REST-контроллер для получения отчётов по поставкам.
  */
 @RestController
-@RequestMapping("/api/reports")
+@RequestMapping("/api/v1/reports")
 public class ReportController {
     private final ReportService reportService;
 
